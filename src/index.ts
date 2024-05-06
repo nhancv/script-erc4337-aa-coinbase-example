@@ -62,7 +62,21 @@ const initUser = async () => {
 };
 
 /**
+ * Send ETH from Smart Account to another address
+ * Requires the Smart Account to have enough ETH balance
+ */
+const buildSendETHTransaction = (ethReceiver: Address, ethValue = parseEther('0.0001')) => {
+  console.log('Send ETH:', ethReceiver, ethValue);
+  return {
+    to: ethReceiver,
+    data: '0x',
+    value: ethValue,
+  };
+};
+
+/**
  * Send Token from Smart Account to another address
+ * Requires the Smart Account to have enough Token balance
  */
 const buildSendTokenTransaction = (tokenReceiver: Address) => {
   // Claim some ETH Faucet to owner
@@ -109,13 +123,12 @@ const aaSendContract = async (smartWallet: any, to: Address) => {
   try {
     // const tx = buildMintNFTTransaction(to);
     const tx = buildSendTokenTransaction(to);
+    // const tx = buildSendETHTransaction(to);
     console.log('Transaction data', tx);
 
     const txHash = await smartWallet.sendTransaction({
       account: smartWallet.account,
-      to: tx.to,
-      data: tx.data,
-      value: 0n,
+      ...tx,
     });
 
     console.log('✅ Transaction successfully sponsored!');
@@ -130,6 +143,7 @@ const processScript = async () => {
 
   /// Sponsor by ETH
   await aaSendContract(smartWallet, owner.address);
+  // Send ETH: https://sepolia.basescan.org/tx/0x9ca30112c8da4a72d08a4f7dfe2a0463e4929334c4e403f8adad0c71fbc42c2f
   // Send DAI ERC20 Token: https://sepolia.basescan.org/tx/0x7859000ebc3220b620934135795a76336813ca4bfe9eb67c8eda2d1bf9304d54
   // Mint NFT: https://sepolia.basescan.org/tx/0x300cbb3b4ff03def27cac0535229bae02d7f08ed150a5fc6fb2ec7ebc7d4150f
 };

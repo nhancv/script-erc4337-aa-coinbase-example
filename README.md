@@ -8,7 +8,6 @@
 
 - No support for ERC20 token payment
 - No support for Whitelist on Contract ABI functions
-- No support for ETH transfer (data = 0x)
 
 ## Install dep
 
